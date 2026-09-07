@@ -248,7 +248,7 @@ export function HeroSection() {
   const prevSlide = HERO_SLIDES[prevSlideIndex];
   const nextSlide = HERO_SLIDES[nextSlideIndex];
   const activeMenuItem = MENU_ITEMS.find((m) => m.id === activeSlide.menuItemId) || MENU_ITEMS[0];
-  const newMenuRow = MENU_ITEMS.slice(0, 5);
+  const newMenuRow = MENU_ITEMS.filter((m) => m.category === "Burgers");
 
   return (
     <div className="w-full">

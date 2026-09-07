@@ -34,7 +34,7 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
             <img
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
             />
             {/* 100% Veg Symbol */}
             <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs p-1 rounded-md shadow-xs border border-green-600/30 flex items-center justify-center">
@@ -132,7 +132,7 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
           <img
             src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
           />
 
           {/* Top Left: 100% Veg Symbol */}
