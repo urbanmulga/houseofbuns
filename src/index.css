@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --color-hob-bg: var(--hob-bg);
+  --color-hob-surface: var(--hob-surface);
+  --color-hob-brown: var(--hob-brown);
+  --color-hob-brown-dark: var(--hob-brown-dark);
+  --color-hob-caramel: var(--hob-caramel);
+  --color-hob-mint: var(--hob-mint);
+  --color-hob-cream: var(--hob-cream);
+  --color-hob-text: var(--hob-text);
+  --color-hob-muted: var(--hob-muted);
+
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-cursive: "Dancing Script", "Playfair Display", cursive;
+  --font-ultra-tall: "Teko", "Antonio", "Bebas Neue", sans-serif;
+}
+
+.font-cursive {
+  font-family: "Dancing Script", "Playfair Display", cursive;
+}
+
+.font-ultra-tall {
+  font-family: "Teko", "Antonio", "Bebas Neue", sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+}
+
+:root {
+  --hob-bg: #EFF5F1;
+  --hob-surface: #FFFFFF;
+  --hob-brown: #006241;
+  --hob-brown-dark: #071E15;
+  --hob-caramel: #00A862;
+  --hob-mint: #D4E9E2;
+  --hob-cream: #F2FAF5;
+  --hob-text: #0C231A;
+  --hob-muted: #4E6B60;
+}
+
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Custom Utilities */
+.food-shadow {
+  filter: drop-shadow(0 20px 25px rgba(0, 98, 65, 0.18)) drop-shadow(0 8px 10px rgba(0, 98, 65, 0.10));
+}
+
+.food-shadow-lg {
+  filter: drop-shadow(0 28px 36px rgba(0, 98, 65, 0.28)) drop-shadow(0 12px 16px rgba(0, 98, 65, 0.16));
+}
+
+.card-curve {
+  border-radius: 2.25rem;
+}
+
+.pill-shape {
+  border-radius: 9999px;
+}
+
+/* ========================================================================= */
+/* Globally remove side scrollbar from every page (keep smooth scrolling)    */
+/* ========================================================================= */
+html,
+body,
+* {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+/* Utility to ensure carousels and containers stay scrollbar-free */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
