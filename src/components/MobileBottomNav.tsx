@@ -1,28 +1,47 @@
-import { Link, useLocation } from "react-router-dom";
-import { Home, UtensilsCrossed, BookOpen, MapPin, ShoppingBag } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Home, UtensilsCrossed, BookOpen, Search, ShoppingBag } from "lucide-react";
 import { useCartOrder } from "../context/CartOrderContext";
 
 export function MobileBottomNav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { cartCount, openOrderModal } = useCartOrder();
+
+  const handleSearchClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === "/menu") {
+      const searchInput = document.querySelector('input[placeholder*="Search"]') as HTMLInputElement | null;
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      navigate("/menu?search=open");
+    }
+  };
 
   const items = [
     { label: "Home", path: "/", icon: Home },
     { label: "Menu", path: "/menu", icon: UtensilsCrossed },
     { label: "Story", path: "/story", icon: BookOpen },
-    { label: "Indore", path: "/outlet", icon: MapPin },
+    { label: "Search", path: "/menu?search=open", icon: Search, onClick: handleSearchClick },
   ];
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-hob-surface/95 backdrop-blur-lg border-t border-hob-brown/10 px-4 py-2 flex items-center justify-around">
       {items.map((item) => {
         const Icon = item.icon;
-        const isActive = location.pathname === item.path;
+        const isSearch = item.label === "Search";
+        const isActive = isSearch
+          ? location.search.includes("search=open")
+          : location.pathname === item.path && !location.search.includes("search=open");
+
         return (
           <Link
-            key={item.path}
+            key={item.label}
             to={item.path}
-            className={`flex flex-col items-center gap-1 py-1 px-2 rounded-xl text-xs font-semibold transition-colors ${
+            onClick={item.onClick}
+            className={`flex flex-col items-center gap-1 py-1 px-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
               isActive ? "text-hob-brown font-bold" : "text-hob-muted hover:text-hob-brown"
             }`}
           >

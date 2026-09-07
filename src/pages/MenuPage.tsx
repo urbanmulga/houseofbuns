@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { 
   Search, 
   ArrowUpDown, 
@@ -18,6 +19,8 @@ import {
 } from "../data/menuData";
 
 export function MenuPage() {
+  const location = useLocation();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>("Burgers");
   const [searchQuery, setSearchQuery] = useState("");
   const [jainOnly, setJainOnly] = useState(false);
@@ -25,6 +28,13 @@ export function MenuPage() {
   const [underPrice, setUnderPrice] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">("featured");
   const [isSortOpen, setIsSortOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.search.includes("search=open") && searchInputRef.current) {
+      searchInputRef.current.focus();
+      searchInputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [location.search]);
 
   // Filter Logic
   const filteredItems = MENU_ITEMS.filter((item) => {
@@ -64,6 +74,7 @@ export function MenuPage() {
             <div className="relative shrink-0 w-40 xs:w-48 sm:w-64">
               <Search className="w-3.5 h-3.5 text-hob-muted absolute left-3 top-1/2 -translate-y-1/2" />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

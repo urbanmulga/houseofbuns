@@ -124,11 +124,11 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
   return (
     <div
       onClick={() => openProductDetail(item)}
-      className="group bg-white hover:bg-hob-surface/50 border border-hob-brown/10 rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer relative"
+      className="group bg-white hover:bg-hob-surface/50 border border-hob-brown/10 rounded-2xl sm:rounded-3xl p-2.5 xs:p-3 sm:p-4 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer relative"
     >
       <div>
         {/* Product Visual Container */}
-        <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden mb-3 bg-hob-surface/60 flex items-center justify-center">
+        <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden mb-2.5 sm:mb-3 bg-hob-surface/60 flex items-center justify-center">
           <img
             src={item.image}
             alt={item.name}
@@ -136,8 +136,8 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
           />
 
           {/* Top Left: 100% Veg Symbol */}
-          <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs p-1 rounded-md shadow-xs border border-green-600/30 flex items-center justify-center">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-600 inline-block ring-1 ring-green-600 ring-offset-1" />
+          <div className="absolute top-1.5 xs:top-2 left-1.5 xs:left-2 bg-white/95 backdrop-blur-xs p-0.5 xs:p-1 rounded-md shadow-xs border border-green-600/30 flex items-center justify-center">
+            <span className="w-2 xs:w-2.5 h-2 xs:h-2.5 rounded-full bg-green-600 inline-block ring-1 ring-green-600 ring-offset-1" />
           </div>
 
           {/* Top Right: Favorite Button */}
@@ -147,11 +147,11 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
               setIsFavorite(!isFavorite);
             }}
             type="button"
-            className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-xs hover:bg-white text-hob-muted hover:text-red-500 shadow-xs transition-all cursor-pointer"
+            className="absolute top-1.5 xs:top-2 right-1.5 xs:right-2 p-1 xs:p-1.5 rounded-full bg-white/90 backdrop-blur-xs hover:bg-white text-hob-muted hover:text-red-500 shadow-xs transition-all cursor-pointer"
             aria-label="Add to favorites"
           >
             <Heart
-              className={`w-3.5 h-3.5 ${
+              className={`w-3 xs:w-3.5 h-3 xs:h-3.5 ${
                 isFavorite ? "fill-red-500 text-red-500" : "text-hob-muted"
               }`}
             />
@@ -160,31 +160,34 @@ export function ProductCard({ item, layout = "quick-commerce" }: ProductCardProp
           {/* Floating ADD Button over bottom-right of image (Matching Reference!) */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-2 right-2 z-10"
+            className="absolute bottom-1.5 xs:bottom-2 right-1.5 xs:right-2 z-10"
           >
             {qtyInCart > 0 ? (
-              <div className="flex items-center bg-[#006241] text-white rounded-lg sm:rounded-xl px-2.5 py-1.5 shadow-md">
+              <div className="flex items-center bg-[#006241] text-white rounded-lg sm:rounded-xl px-1.5 xs:px-2.5 py-0.5 sm:py-1.5 shadow-md">
                 <button
                   onClick={() => updateQuantity(cartItem!.id, -1)}
                   className="p-0.5 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
                   aria-label="Decrease quantity"
                 >
-                  <Minus className="w-3.5 h-3.5" />
+                  <Minus className="w-3 h-3" />
                 </button>
-                <span className="text-xs font-black w-5 text-center">{qtyInCart}</span>
+                <span className="text-[11px] sm:text-xs font-black w-4 xs:w-5 text-center">{qtyInCart}</span>
                 <button
                   onClick={() => updateQuantity(cartItem!.id, 1)}
                   className="p-0.5 hover:bg-white/20 rounded-full transition-colors cursor-pointer"
                   aria-label="Increase quantity"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3 h-3" />
                 </button>
               </div>
             ) : (
               <button
-                onClick={() => addToCart(item, 1)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(item, 1);
+                }}
                 type="button"
-                className="px-4 py-1.5 rounded-lg sm:rounded-xl bg-white hover:bg-green-50 text-[#006241] font-display font-black text-xs tracking-wider border-2 border-[#006241] shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer uppercase flex items-center gap-1"
+                className="px-2.5 xs:px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white hover:bg-green-50 text-[#006241] font-display font-black text-[10px] xs:text-xs tracking-wider border-2 border-[#006241] shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer uppercase flex items-center gap-1"
               >
                 <span>ADD</span>
               </button>

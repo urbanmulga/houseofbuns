@@ -48,16 +48,16 @@ export function HomePage() {
       <MadeAtTheHouse />
 
       {/* 3. Interactive Menu Grid Preview */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <section className="py-10 sm:py-16 px-3 xs:px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4">
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <span className="w-2 h-2 rounded-full bg-green-600 inline-block ring-1 ring-green-600 ring-offset-1" />
-              <span className="text-xs font-black uppercase tracking-widest text-[#006241] font-display">
+              <span className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-[#006241] font-display">
                 100% Pure Veg • Eggless • Jain Certified
               </span>
             </div>
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-hob-brown tracking-tight">
+            <h2 className="font-display font-black text-2xl xs:text-3xl sm:text-4xl text-hob-brown tracking-tight">
               THE HOUSE MENU
             </h2>
           </div>
@@ -68,7 +68,7 @@ export function HomePage() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 ${
+                className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
                   selectedCategory === cat
                     ? "bg-hob-brown text-hob-cream shadow-sm"
                     : "bg-hob-surface hover:bg-hob-surface/80 text-hob-muted"
@@ -80,8 +80,8 @@ export function HomePage() {
           </div>
         </div>
 
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Product Cards Grid: 2 columns on mobile, 2 on tablet, 3 on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 xs:gap-3.5 sm:gap-6">
           {filteredItems.map((item) => (
             <ProductCard key={item.id} item={item} />
           ))}
