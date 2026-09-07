@@ -114,10 +114,10 @@ export function OutletPage() {
                 href={RESTAURANT_CONFIG.location.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="py-3 px-6 rounded-full bg-green-700 hover:bg-green-800 text-white font-display font-bold text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-md inline-flex items-center gap-2"
+                className="py-3 px-6 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-display font-bold text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-md inline-flex items-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
-                WhatsApp Concierge
+                WhatsApp: {RESTAURANT_CONFIG.location.phone}
               </a>
             </div>
           </div>

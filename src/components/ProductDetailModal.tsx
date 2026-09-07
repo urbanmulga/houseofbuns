@@ -120,31 +120,37 @@ export function ProductDetailModal() {
             className="w-full sm:max-w-lg min-h-screen sm:min-h-0 sm:max-h-[90vh] bg-hob-bg sm:bg-white sm:rounded-3xl sm:shadow-2xl sm:border sm:border-hob-brown/15 overflow-hidden flex flex-col pointer-events-auto relative"
           >
             {/* ======================================================== */}
-            {/* TOP HEADER: Arched Emerald Banner matching Reference Mockup */}
+            {/* TOP HERO IMAGE BANNER: Full-Bleed Filled Till Edges       */}
             {/* ======================================================== */}
-            <div className="relative bg-hob-brown text-white pt-5 pb-16 px-4 rounded-b-[3rem] sm:rounded-b-[2.5rem] overflow-hidden shrink-0 shadow-md">
-              {/* Subtle background blur arcs */}
-              <div className="absolute -right-16 -top-16 w-56 h-56 bg-hob-caramel/25 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -left-12 bottom-0 w-44 h-44 bg-hob-brown-dark/40 rounded-full blur-xl pointer-events-none" />
+            <div className="relative w-full h-72 xs:h-80 sm:h-88 overflow-hidden shrink-0 bg-hob-surface">
+              {/* Full-bleed Food Image filled till edges */}
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="w-full h-full object-cover object-center"
+              />
+
+              {/* Gradient Overlays for contrast and crisp controls */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-transparent to-black/60 pointer-events-none" />
 
               {/* Floating Top Navigation Bar */}
-              <div className="relative z-20 flex items-center justify-between">
+              <div className="absolute top-0 left-0 right-0 p-4 sm:p-5 z-20 flex items-center justify-between">
                 {/* Mobile & Desktop Back Button */}
                 <button
                   onClick={handleBack}
                   type="button"
-                  className="w-10 h-10 rounded-full bg-white/95 text-hob-brown shadow-md hover:bg-white active:scale-90 transition-all flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-hob-brown shadow-lg active:scale-90 transition-all flex items-center justify-center backdrop-blur-md cursor-pointer border border-white/30"
                   aria-label="Go back"
                 >
                   <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
                 </button>
 
                 {/* Center Badge / Category */}
-                <div className="text-center">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-hob-mint font-display block">
+                <div className="px-3.5 py-1 rounded-full bg-black/55 backdrop-blur-md border border-white/20 text-center shadow-md">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-emerald-300 font-display block">
                     House of Buns Indore
                   </span>
-                  <span className="text-xs font-bold text-white/90">
+                  <span className="text-[11px] font-bold text-white/95">
                     {selectedProduct.bunType}
                   </span>
                 </div>
@@ -154,7 +160,7 @@ export function ProductDetailModal() {
                   <button
                     onClick={handleShare}
                     type="button"
-                    className="w-10 h-10 rounded-full bg-white/95 text-hob-brown shadow-md hover:bg-white active:scale-90 transition-all flex items-center justify-center"
+                    className="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-hob-brown shadow-lg active:scale-90 transition-all flex items-center justify-center backdrop-blur-md cursor-pointer border border-white/30"
                     aria-label="Share item"
                   >
                     <Share2 className="w-4 h-4" />
@@ -163,7 +169,7 @@ export function ProductDetailModal() {
                   <button
                     onClick={handleBack}
                     type="button"
-                    className="hidden sm:flex w-10 h-10 rounded-full bg-white/95 text-hob-brown shadow-md hover:bg-white active:scale-90 transition-all items-center justify-center"
+                    className="hidden sm:flex w-10 h-10 rounded-full bg-white/90 hover:bg-white text-hob-brown shadow-lg active:scale-90 transition-all items-center justify-center backdrop-blur-md cursor-pointer border border-white/30"
                     aria-label="Close modal"
                   >
                     <X className="w-5 h-5" />
@@ -171,40 +177,32 @@ export function ProductDetailModal() {
                 </div>
               </div>
 
-              {/* Floating Hero Food Image (Overlapping into content area) */}
-              <div className="relative z-10 pt-4 flex justify-center">
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.4 }}
-                  className="relative w-56 h-56 xs:w-64 xs:h-64 sm:w-60 sm:h-60"
-                >
-                  {/* Food drop-shadow container */}
-                  <img
-                    src={selectedProduct.image}
-                    alt={selectedProduct.name}
-                    className="w-full h-full object-cover rounded-full food-shadow-lg transform hover:scale-105 transition-transform duration-500"
-                  />
+              {/* Floating Badges at Bottom of Image */}
+              <div className="absolute bottom-3.5 left-4 right-4 z-20 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md backdrop-blur-md ${
+                      selectedProduct.isVeg
+                        ? "bg-emerald-600/95 text-white border border-emerald-400/40"
+                        : "bg-red-600/95 text-white border border-red-400/40"
+                    }`}
+                  >
+                    {selectedProduct.isVeg ? "100% Pure Veg" : "Non-Veg"}
+                  </span>
 
-                  {/* Badges on food */}
-                  <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-                    <span
-                      className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm ${
-                        selectedProduct.isVeg
-                          ? "bg-green-100 text-green-900 border border-green-300"
-                          : "bg-red-100 text-red-900 border border-red-300"
-                      }`}
-                    >
-                      {selectedProduct.isVeg ? "100% Veg" : "Non-Veg"}
+                  {selectedProduct.isBestSeller && (
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-hob-brown/95 text-white flex items-center gap-1 shadow-md backdrop-blur-md border border-hob-caramel/40">
+                      <Sparkles className="w-3 h-3 text-hob-caramel" />
+                      Best Seller
                     </span>
-                    {selectedProduct.isBestSeller && (
-                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-hob-brown-dark text-white flex items-center gap-1 shadow-sm border border-white/20">
-                        <Sparkles className="w-3 h-3 text-hob-caramel" />
-                        Best Seller
-                      </span>
-                    )}
-                  </div>
-                </motion.div>
+                  )}
+                </div>
+
+                {selectedProduct.isJainCertified && (
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/95 text-[#006241] shadow-md backdrop-blur-md font-display border border-emerald-200">
+                    Jain Certified
+                  </span>
+                )}
               </div>
             </div>
 

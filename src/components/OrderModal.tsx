@@ -6,15 +6,45 @@ import {
   Plus,
   Minus,
   Trash2,
-  ExternalLink,
-  Phone,
-  Navigation,
   ShoppingBag,
-  Sparkles,
   Clock,
+  MessageSquare,
+  CheckCircle2,
+  Heart,
+  Star,
+  Flame,
+  Sparkles,
 } from "lucide-react";
 import { useCartOrder } from "../context/CartOrderContext";
 import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
+import { MENU_ITEMS } from "../data/menuData";
+
+const EMPTY_BAG_SUGGESTIONS = [
+  {
+    type: "most-picked",
+    badge: "Most Picked Item",
+    badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
+    icon: Flame,
+    tagline: "Ordered 1,400+ times this month • Indore's #1 Pick",
+    item: MENU_ITEMS.find((m) => m.id === "chipotle-aloo-tikki") || MENU_ITEMS[0],
+  },
+  {
+    type: "most-liked",
+    badge: "Most Liked Craving",
+    badgeColor: "bg-rose-100 text-rose-900 border-rose-300",
+    icon: Heart,
+    tagline: "99% Customer Love Score • Double Melted Cheddar",
+    item: MENU_ITEMS.find((m) => m.id === "cheese-chilli-aloo-tikki") || MENU_ITEMS[1],
+  },
+  {
+    type: "greatest-reviews",
+    badge: "Greatest Reviews",
+    badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-300",
+    icon: Star,
+    tagline: "4.9 ★ Rating (420+ Verified Foodie Reviews)",
+    item: MENU_ITEMS.find((m) => m.id === "tex-mex-burger") || MENU_ITEMS[2],
+  },
+];
 
 export function OrderModal() {
   const {
@@ -22,9 +52,11 @@ export function OrderModal() {
     closeOrderModal,
     cartItems,
     cartTotal,
+    addToCart,
     updateQuantity,
     removeFromCart,
     clearCart,
+    openProductDetail,
   } = useCartOrder();
 
   // Support hardware/browser back button on mobile devices
@@ -52,6 +84,24 @@ export function OrderModal() {
   };
 
   const totalItemsCount = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
+
+  const getWhatsAppOrderUrl = () => {
+    const phone = RESTAURANT_CONFIG.location.phone.replace(/[^0-9]/g, "");
+
+    const itemsSummary = cartItems
+      .map((ci) => {
+        const addonsText =
+          ci.selectedAddons && ci.selectedAddons.length > 0
+            ? ` (with ${ci.selectedAddons.map((a) => a.name).join(", ")})`
+            : "";
+        return `• ${ci.quantity}x ${ci.item.name}${addonsText} at ₹${ci.totalItemPrice}`;
+      })
+      .join("\n");
+
+    const message = `Hello House of Buns! 👋\n\nI want to purchase:\n${itemsSummary}\n\nTotal Price: ₹${cartTotal}\n\nPlease confirm my order and share delivery/pickup details!`;
+
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <AnimatePresence>
@@ -82,7 +132,7 @@ export function OrderModal() {
                 <button
                   onClick={handleBack}
                   type="button"
-                  className="w-10 h-10 rounded-full bg-hob-bg hover:bg-hob-surface text-hob-brown shadow-sm active:scale-90 transition-all flex items-center justify-center border border-hob-brown/10"
+                  className="w-10 h-10 rounded-full bg-hob-bg hover:bg-hob-surface text-hob-brown shadow-sm active:scale-90 transition-all flex items-center justify-center border border-hob-brown/10 cursor-pointer"
                   aria-label="Go back to menu"
                 >
                   <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
@@ -98,7 +148,7 @@ export function OrderModal() {
                     )}
                   </h2>
                   <p className="text-[11px] text-hob-muted hidden xs:block">
-                    Vijay Nagar Flagship, Indore
+                    Direct Kitchen Dispatch • Vijay Nagar, Indore
                   </p>
                 </div>
               </div>
@@ -109,7 +159,7 @@ export function OrderModal() {
                   <button
                     onClick={clearCart}
                     type="button"
-                    className="p-2 rounded-full text-hob-muted hover:text-red-600 hover:bg-red-50 transition-colors flex items-center gap-1 text-xs font-semibold"
+                    className="p-2 rounded-full text-hob-muted hover:text-red-600 hover:bg-red-50 transition-colors flex items-center gap-1 text-xs font-semibold cursor-pointer"
                     title="Clear order bag"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -120,7 +170,7 @@ export function OrderModal() {
                 <button
                   onClick={handleBack}
                   type="button"
-                  className="hidden sm:flex w-9 h-9 rounded-full bg-hob-bg hover:bg-hob-surface text-hob-brown items-center justify-center border border-hob-brown/10 transition-colors"
+                  className="hidden sm:flex w-9 h-9 rounded-full bg-hob-bg hover:bg-hob-surface text-hob-brown items-center justify-center border border-hob-brown/10 transition-colors cursor-pointer"
                   aria-label="Close dialog"
                 >
                   <X className="w-4 h-4" />
@@ -133,27 +183,119 @@ export function OrderModal() {
             {/* ======================================================== */}
             <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-5 pb-32 sm:pb-8 space-y-6">
               
-              {/* Empty Bag State */}
+              {/* Empty Bag State with Curated Suggestions */}
               {cartItems.length === 0 ? (
-                <div className="p-8 sm:p-12 text-center bg-white rounded-3xl border border-dashed border-hob-brown/20 space-y-4 my-4 shadow-sm">
-                  <div className="w-16 h-16 rounded-full bg-hob-bg text-hob-muted mx-auto flex items-center justify-center border border-hob-brown/10">
-                    <ShoppingBag className="w-8 h-8 text-hob-brown/50" />
+                <div className="space-y-5 my-1">
+                  {/* Empty Bag Greeting Card */}
+                  <div className="p-6 sm:p-8 text-center bg-white rounded-3xl border border-hob-brown/10 shadow-xs space-y-3">
+                    <div className="w-14 h-14 rounded-full bg-hob-bg text-hob-brown mx-auto flex items-center justify-center border border-hob-brown/10 shadow-inner">
+                      <ShoppingBag className="w-7 h-7 text-hob-brown/60" />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-black text-xl text-hob-brown tracking-tight">
+                        Your Order Bag is Empty
+                      </h3>
+                      <p className="text-xs text-hob-muted max-w-sm mx-auto mt-1 leading-relaxed">
+                        Start your order with Indore’s most-loved artisanal smash creations below or browse our full menu.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleBack}
+                      type="button"
+                      className="py-2.5 px-6 rounded-full bg-hob-brown hover:bg-hob-brown-dark text-white text-xs font-extrabold uppercase tracking-wider shadow-md transition-all active:scale-95 cursor-pointer"
+                    >
+                      Browse Full Menu
+                    </button>
                   </div>
-                  <div>
-                    <h3 className="font-display font-black text-lg text-hob-brown">
-                      Your Order Bag is Empty
-                    </h3>
-                    <p className="text-xs text-hob-muted max-w-xs mx-auto mt-1 leading-relaxed">
-                      Explore our handcrafted smashed burgers, crispy sides, and thick shakes to start your order.
-                    </p>
+
+                  {/* Suggestions Section: Most Picked, Most Liked, Greatest Reviews */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-xs font-black uppercase tracking-wider text-hob-brown font-display flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-hob-caramel" />
+                        <span>Recommended Suggestions</span>
+                      </span>
+                      <span className="text-[11px] font-semibold text-hob-muted">
+                        Tap + to add
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {EMPTY_BAG_SUGGESTIONS.map((suggestion) => {
+                        const Icon = suggestion.icon;
+                        const item = suggestion.item;
+                        if (!item) return null;
+
+                        return (
+                          <div
+                            key={suggestion.type}
+                            className="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-white border border-hob-brown/10 shadow-xs hover:shadow-md transition-all flex items-center justify-between gap-3"
+                          >
+                            <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                              {/* Food Image */}
+                              <div
+                                onClick={() => openProductDetail(item)}
+                                className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden shrink-0 bg-hob-surface cursor-pointer group border border-hob-brown/10"
+                              >
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                />
+                                <div className="absolute top-1 left-1 bg-white/95 p-0.5 rounded-md border border-green-600/30">
+                                  <span className="w-2 h-2 rounded-full bg-green-600 block" />
+                                </div>
+                              </div>
+
+                              {/* Details */}
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                  <span
+                                    className={`inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full border shadow-2xs ${suggestion.badgeColor}`}
+                                  >
+                                    <Icon className="w-2.5 h-2.5" />
+                                    <span>{suggestion.badge}</span>
+                                  </span>
+                                </div>
+
+                                <h4
+                                  onClick={() => openProductDetail(item)}
+                                  className="font-display font-bold text-sm text-hob-brown leading-tight truncate cursor-pointer hover:text-emerald-700 transition-colors"
+                                >
+                                  {item.name}
+                                </h4>
+
+                                <p className="text-[11px] text-hob-muted truncate mt-0.5">
+                                  {suggestion.tagline}
+                                </p>
+
+                                <div className="flex items-baseline gap-1.5 mt-1">
+                                  <span className="font-display font-black text-sm sm:text-base text-hob-brown">
+                                    ₹{item.price}
+                                  </span>
+                                  {item.originalPrice && (
+                                    <span className="text-xs text-hob-muted line-through">
+                                      ₹{item.originalPrice}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Add to Cart Button */}
+                            <button
+                              onClick={() => addToCart(item, 1)}
+                              type="button"
+                              className="px-3.5 py-1.5 rounded-xl bg-hob-brown hover:bg-hob-brown-dark text-white font-display font-black text-xs tracking-wider uppercase transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1 cursor-pointer shrink-0"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              <span>Add</span>
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <button
-                    onClick={handleBack}
-                    type="button"
-                    className="py-3 px-6 rounded-full bg-hob-brown text-white text-xs font-extrabold uppercase tracking-wider shadow-md hover:bg-hob-brown-dark transition-all active:scale-95"
-                  >
-                    Browse Fresh Menu
-                  </button>
                 </div>
               ) : (
                 <>
@@ -202,7 +344,7 @@ export function OrderModal() {
                               <button
                                 onClick={() => updateQuantity(ci.id, -1)}
                                 type="button"
-                                className="w-6 h-6 rounded-full bg-white hover:bg-hob-brown hover:text-white text-hob-brown transition-colors flex items-center justify-center shadow-xs"
+                                className="w-6 h-6 rounded-full bg-white hover:bg-hob-brown hover:text-white text-hob-brown transition-colors flex items-center justify-center shadow-xs cursor-pointer"
                                 aria-label="Decrease quantity"
                               >
                                 <Minus className="w-3 h-3" />
@@ -213,7 +355,7 @@ export function OrderModal() {
                               <button
                                 onClick={() => updateQuantity(ci.id, 1)}
                                 type="button"
-                                className="w-6 h-6 rounded-full bg-hob-brown text-white hover:bg-hob-brown-dark transition-colors flex items-center justify-center shadow-xs"
+                                className="w-6 h-6 rounded-full bg-hob-brown text-white hover:bg-hob-brown-dark transition-colors flex items-center justify-center shadow-xs cursor-pointer"
                                 aria-label="Increase quantity"
                               >
                                 <Plus className="w-3 h-3" />
@@ -223,7 +365,7 @@ export function OrderModal() {
                             <button
                               onClick={() => removeFromCart(ci.id)}
                               type="button"
-                              className="p-1.5 text-hob-muted hover:text-red-500 transition-colors"
+                              className="p-1.5 text-hob-muted hover:text-red-500 transition-colors cursor-pointer"
                               aria-label={`Remove ${ci.item.name}`}
                             >
                               <Trash2 className="w-4 h-4" />
@@ -250,81 +392,55 @@ export function OrderModal() {
                     </div>
                   </div>
 
-                  {/* Fulfillment Options */}
-                  <div className="space-y-3">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-hob-brown font-display">
-                      Fulfillment Method
-                    </h3>
+                  {/* Direct WhatsApp Ordering Information Card */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-[#0B2E21] to-[#04160F] text-white shadow-md space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Order Directly via WhatsApp</span>
+                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                      {/* Option 1: Delivery */}
-                      <div className="p-4 rounded-2xl bg-white border border-hob-brown/15 shadow-xs flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="font-bold text-sm text-hob-brown">Doorstep Delivery</span>
-                            <span className="text-[10px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">
-                              Hot & Fresh
-                            </span>
-                          </div>
-                          <p className="text-xs text-hob-muted mb-3 leading-relaxed">
-                            Insulated thermal delivery across Indore via official partners.
-                          </p>
-                        </div>
-                        <div className="space-y-2">
-                          <a
-                            href={RESTAURANT_CONFIG.deliveryPartners.zomatoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-[#E23744] text-white font-bold text-xs tracking-wide hover:brightness-105 transition-all shadow-xs active:scale-95"
-                          >
-                            <span>Order via Zomato</span>
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
-                          <a
-                            href={RESTAURANT_CONFIG.deliveryPartners.swiggyUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-[#FC8019] text-white font-bold text-xs tracking-wide hover:brightness-105 transition-all shadow-xs active:scale-95"
-                          >
-                            <span>Order via Swiggy</span>
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
-                        </div>
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <h4 className="font-display font-black text-base sm:text-lg text-white">
+                        Instant Kitchen Confirmation
+                      </h4>
+                      <span className="text-[11px] font-bold text-emerald-300 bg-white/10 px-2 py-0.5 rounded-full">
+                        {RESTAURANT_CONFIG.location.phone}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-white/80 leading-relaxed">
+                      Clicking <strong>"Proceed to Order"</strong> opens your WhatsApp with your items and prices pre-filled:
+                    </p>
+
+                    <div className="p-3 rounded-xl bg-black/30 border border-white/10 text-[11px] font-mono text-emerald-200/90 whitespace-pre-line leading-relaxed">
+                      {`Hello House of Buns! 👋\nI want to purchase:\n${cartItems
+                        .map(
+                          (ci) =>
+                            `• ${ci.quantity}x ${ci.item.name} at ₹${ci.totalItemPrice}`
+                        )
+                        .join("\n")}\nTotal Price: ₹${cartTotal}`}
+                    </div>
+
+                    <div className="space-y-1 pt-1 text-[11px] text-white/70">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Instant receipt & confirmation by our kitchen manager</span>
                       </div>
-
-                      {/* Option 2: Dine In / Takeaway */}
-                      <div className="p-4 rounded-2xl bg-white border border-hob-brown/15 shadow-xs flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="font-bold text-sm text-hob-brown">Dine In / Takeaway</span>
-                            <span className="text-[10px] bg-hob-mint text-hob-brown font-bold px-2 py-0.5 rounded-full">
-                              Vijay Nagar
-                            </span>
-                          </div>
-                          <p className="text-xs text-hob-muted mb-3 leading-relaxed">
-                            Straight off the flat-top griddle at our flagship kitchen.
-                          </p>
-                        </div>
-                        <div className="space-y-2">
-                          <a
-                            href={RESTAURANT_CONFIG.location.googleMapsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-hob-brown hover:bg-hob-brown-dark text-white font-bold text-xs tracking-wide transition-all shadow-xs active:scale-95"
-                          >
-                            <Navigation className="w-3.5 h-3.5 text-hob-mint" />
-                            <span>Navigate to Outlet</span>
-                          </a>
-                          <a
-                            href={`tel:${RESTAURANT_CONFIG.location.phone}`}
-                            className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-hob-bg border border-hob-brown/15 text-hob-brown font-bold text-xs tracking-wide hover:bg-hob-surface transition-all active:scale-95"
-                          >
-                            <Phone className="w-3.5 h-3.5 text-hob-caramel" />
-                            <span>Call Kitchen: {RESTAURANT_CONFIG.location.phone}</span>
-                          </a>
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Share your address or takeaway time directly in the chat</span>
                       </div>
                     </div>
+
+                    <a
+                      href={getWhatsAppOrderUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-display font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md active:scale-95 cursor-pointer mt-2"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Proceed to Order on WhatsApp ({RESTAURANT_CONFIG.location.phone})</span>
+                    </a>
                   </div>
 
                   {/* Store Note */}
@@ -351,13 +467,13 @@ export function OrderModal() {
                 </div>
 
                 <a
-                  href={RESTAURANT_CONFIG.deliveryPartners.zomatoUrl}
+                  href={getWhatsAppOrderUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-3.5 px-6 rounded-full bg-hob-brown hover:bg-hob-brown-dark text-white font-display font-extrabold text-xs sm:text-sm tracking-widest uppercase transition-all shadow-xl active:scale-95 flex items-center gap-2 text-center"
+                  className="py-3.5 px-6 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-display font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-xl active:scale-95 flex items-center gap-2 text-center cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-hob-mint" />
-                  <span>Proceed to Delivery</span>
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Proceed to Order</span>
                 </a>
               </div>
             )}

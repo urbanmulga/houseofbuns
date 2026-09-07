@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Sparkles, ArrowRight, Flame, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, Flame, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartOrder } from "../context/CartOrderContext";
 import { MENU_ITEMS } from "../data/menuData";
 import { ProductCard } from "../components/ProductCard";
@@ -197,7 +197,6 @@ const SPECIAL_OFFERS = [
 
 export function HeroSection() {
   const { openOrderModal } = useCartOrder();
-  const [searchQuery, setSearchQuery] = useState("");
   const [[page, direction], setPage] = useState([0, 0]);
   const [isHovered, setIsHovered] = useState(false);
   const [activeOfferIndex, setActiveOfferIndex] = useState(0);
@@ -501,35 +500,17 @@ export function HeroSection() {
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5 sm:mt-8 space-y-6 sm:space-y-8">
         
-        {/* Search & New Menu Card */}
+        {/* New Menu Card */}
         <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-hob-brown/10">
           
-          {/* Search Row with Brand Logo Tile */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-hob-surface border border-hob-brown/15 flex items-center justify-center shrink-0 shadow-xs">
-              <img
-                src="/images/brand-logo.png"
-                alt="House Logo"
-                className="w-7 h-7 object-contain"
-              />
-            </div>
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-hob-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder='Search "Aloo Tikki", "Cheese Coins", "Cold Coffee"...'
-                className="w-full bg-hob-surface/80 pl-10 pr-4 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm text-hob-text placeholder:text-hob-muted focus:outline-none focus:ring-2 focus:ring-hob-caramel transition-all border border-hob-brown/10 shadow-xs"
-              />
-            </div>
-          </div>
-
           {/* New Menu / Fresh Drops Heading */}
-          <div className="flex items-center justify-between mt-5 mb-3">
-            <h2 className="font-display font-black text-lg sm:text-xl text-hob-brown tracking-tight">
-              New Menu
-            </h2>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <h2 className="font-display font-black text-lg sm:text-xl text-hob-brown tracking-tight">
+                New Menu
+              </h2>
+            </div>
             <span className="text-xs font-bold text-hob-caramel tracking-wider uppercase">
               Fresh Drops
             </span>
@@ -537,15 +518,9 @@ export function HeroSection() {
 
           {/* Horizontal Product Cards Carousel */}
           <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 pt-1 no-scrollbar w-full max-w-full">
-            {newMenuRow
-              .filter(
-                (item) =>
-                  !searchQuery ||
-                  item.name.toLowerCase().includes(searchQuery.toLowerCase())
-              )
-              .map((item) => (
-                <ProductCard key={item.id} item={item} layout="horizontal" />
-              ))}
+            {newMenuRow.map((item) => (
+              <ProductCard key={item.id} item={item} layout="horizontal" />
+            ))}
           </div>
         </div>
 

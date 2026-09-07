@@ -6,10 +6,8 @@ import { MobileBottomNav } from "./components/MobileBottomNav";
 import { OrderModal } from "./components/OrderModal";
 import { ProductDetailModal } from "./components/ProductDetailModal";
 import { NavigationDrawer } from "./components/NavigationDrawer";
-import { OrderTrackingModal } from "./components/OrderTrackingModal";
 import { ContactUsModal } from "./components/ContactUsModal";
-import { AuthModal } from "./components/AuthModal";
-import { ProfileModal } from "./components/ProfileModal";
+import { SearchModal } from "./components/SearchModal";
 import { Toast } from "./components/Toast";
 
 // Modern code-splitting with React.lazy
@@ -61,7 +59,7 @@ export function App() {
           <Navbar />
 
           {/* Page Routing with Suspense */}
-          <main className="flex-1 w-full max-w-full">
+          <main className="flex-1 w-full max-w-full pb-28 md:pb-0">
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
@@ -77,12 +75,10 @@ export function App() {
 
           {/* Global UI Modals, Drawers & Notifications */}
           <NavigationDrawer />
-          <OrderTrackingModal />
           <ContactUsModal />
-          <AuthModal />
-          <ProfileModal />
           <OrderModal />
           <ProductDetailModal />
+          <SearchModal />
           <Toast />
         </div>
       </CartOrderProvider>

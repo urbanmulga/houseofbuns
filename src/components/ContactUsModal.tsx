@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { useCartOrder } from "../context/CartOrderContext";
 
+import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
+
 export function ContactUsModal() {
   const { isContactModalOpen, closeContactModal, showToast } = useCartOrder();
   const [name, setName] = useState("");
@@ -112,27 +114,27 @@ export function ContactUsModal() {
                 {/* Direct Touch Channels */}
                 <div className="grid grid-cols-2 gap-3">
                   <a
-                    href="tel:+919826055555"
-                    className="p-3.5 rounded-2xl bg-white hover:bg-hob-mint/30 border border-hob-brown/15 transition-all text-left group shadow-xs"
+                    href={`tel:${RESTAURANT_CONFIG.location.phone}`}
+                    className="p-3.5 rounded-2xl bg-white hover:bg-hob-mint/30 border border-hob-brown/15 transition-all text-left group shadow-xs cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-xl bg-hob-brown/10 text-hob-brown flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                       <Phone className="w-4 h-4 text-hob-brown" />
                     </div>
                     <span className="text-[10px] font-bold uppercase text-hob-muted block">Direct Call</span>
-                    <span className="text-xs font-bold text-hob-brown">+91 98260 55555</span>
+                    <span className="text-xs font-bold text-hob-brown">{RESTAURANT_CONFIG.location.phone}</span>
                   </a>
 
                   <a
-                    href="https://wa.me/919826055555?text=Hi%20House%20of%20Buns%20Indore!"
+                    href={RESTAURANT_CONFIG.location.whatsapp}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-3.5 rounded-2xl bg-[#07251A] text-white hover:bg-[#0A3324] border border-hob-caramel/30 transition-all text-left group shadow-xs"
+                    className="p-3.5 rounded-2xl bg-[#07251A] text-white hover:bg-[#0A3324] border border-hob-caramel/30 transition-all text-left group shadow-xs cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-xl bg-hob-caramel text-white flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <div className="w-8 h-8 rounded-xl bg-[#25D366] text-white flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                       <MessageSquare className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-bold uppercase text-hob-mint block">WhatsApp</span>
-                    <span className="text-xs font-bold text-white">Instant Kitchen Chat</span>
+                    <span className="text-xs font-bold text-white">{RESTAURANT_CONFIG.location.phone}</span>
                   </a>
                 </div>
 
@@ -185,7 +187,7 @@ export function ContactUsModal() {
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+91 98260..."
+                        placeholder="+91 88273..."
                         required
                         className="w-full px-3.5 py-2.5 rounded-xl bg-hob-bg border border-hob-brown/15 text-xs text-hob-text focus:outline-none focus:ring-2 focus:ring-hob-brown/30"
                       />

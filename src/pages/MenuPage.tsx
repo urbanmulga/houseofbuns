@@ -8,7 +8,8 @@ import {
   Sparkles, 
   Check, 
   X,
-  XCircle
+  XCircle,
+  MessageSquare,
 } from "lucide-react";
 import { ProductCard } from "../components/ProductCard";
 import { 
@@ -17,6 +18,7 @@ import {
   CATEGORY_METAS, 
   type CategoryType 
 } from "../data/menuData";
+import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
 
 export function MenuPage() {
   const location = useLocation();
@@ -61,7 +63,7 @@ export function MenuPage() {
   const activeCategoryMeta = CATEGORY_METAS[selectedCategory] || CATEGORY_METAS.All;
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] text-hob-text pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#FBF9F5] text-hob-text pb-8 md:pb-12">
       
       {/* ========================================================================= */}
       {/* FILTER & SEARCH CHIPS BAR (Compact & Flush under Navbar)                  */}
@@ -272,6 +274,18 @@ export function MenuPage() {
                   <p className="text-xs text-hob-brown/80 mt-1 leading-relaxed hidden xs:block">
                     {activeCategoryMeta.description}
                   </p>
+                  <div className="mt-2.5 flex items-center gap-2">
+                    <a
+                      href={RESTAURANT_CONFIG.location.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#006241] text-white text-[11px] font-bold hover:bg-[#004e34] transition-all shadow-xs cursor-pointer active:scale-95"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-emerald-300" />
+                      <span>WhatsApp Orders:</span>
+                      <span className="text-emerald-300 font-black">{RESTAURANT_CONFIG.location.phone}</span>
+                    </a>
+                  </div>
                 </div>
 
                 <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shadow-md shrink-0 border-2 border-white">

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Sparkles } from "lucide-react";
+import { Menu, Sparkles, Search, Phone, MessageSquare } from "lucide-react";
 import { useCartOrder } from "../context/CartOrderContext";
+import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
 
 export function Navbar() {
   const location = useLocation();
-  const { openMenuDrawer, openOrderModal, user } = useCartOrder();
+  const { openMenuDrawer, openOrderModal, openSearchModal } = useCartOrder();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,41 @@ export function Navbar() {
           : "border-b-0 shadow-none"
       }`}
     >
+      {/* Universal Top Contact & WhatsApp Order Strip */}
+      <div className="bg-[#03140D] text-white text-[11px] sm:text-xs py-1.5 px-4 border-b border-white/10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-semibold text-white/90">Vijay Nagar, Indore</span>
+            <span className="text-white/40 hidden xs:inline">•</span>
+            <span className="text-emerald-300/90 hidden xs:inline">11:00 AM – 11:30 PM Daily</span>
+          </div>
+
+          <div className="flex items-center gap-2 xs:gap-3">
+            <span className="text-white/70 hidden sm:inline">Call & WhatsApp Order:</span>
+            <a
+              href={`tel:${RESTAURANT_CONFIG.location.phone}`}
+              className="font-bold text-white hover:text-emerald-300 flex items-center gap-1 transition-colors"
+              title="Call Kitchen"
+            >
+              <Phone className="w-3 h-3 text-hob-caramel" />
+              <span>{RESTAURANT_CONFIG.location.phone}</span>
+            </a>
+            <span className="text-white/30 hidden xs:inline">|</span>
+            <a
+              href={RESTAURANT_CONFIG.location.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden xs:inline-flex items-center gap-1 font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+              title="WhatsApp Order"
+            >
+              <MessageSquare className="w-3 h-3" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
@@ -85,9 +121,20 @@ export function Navbar() {
           </nav>
 
           {/* ========================================================= */}
-          {/* RIGHT: Actions (Order Now CTA + Menu Drawer Trigger)     */}
+          {/* RIGHT: Actions (Search, Order Now CTA + Menu Drawer)      */}
           {/* ========================================================= */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Search Trigger Button (Desktop only - hidden on mobile/tablet as bottom nav has Search) */}
+            <button
+              onClick={() => openSearchModal()}
+              type="button"
+              className="hidden lg:flex p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all active:scale-95 shadow-sm items-center justify-center cursor-pointer group"
+              aria-label="Search Menu"
+              title="Search Menu"
+            >
+              <Search className="w-5 h-5 text-white group-hover:text-hob-mint transition-colors" />
+            </button>
+
             <button
               onClick={() => openOrderModal()}
               type="button"
@@ -105,9 +152,6 @@ export function Navbar() {
               aria-label="Open Navigation Menu"
             >
               <Menu className="w-5 h-5 text-white group-hover:text-hob-mint transition-colors" />
-              {user && (
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-hob-caramel rounded-full ring-2 ring-[#071E15]" />
-              )}
             </button>
           </div>
 

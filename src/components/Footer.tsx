@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Clock, ExternalLink, Heart } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ExternalLink, Heart, MessageSquare } from "lucide-react";
 import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
 
 export function Footer() {
@@ -59,7 +59,7 @@ export function Footer() {
           {/* Column 3: Hours & Delivery */}
           <div className="space-y-4">
             <h3 className="text-base font-bold text-white font-display tracking-wide uppercase text-xs">
-              Dine-In & Ordering
+              Direct Kitchen & Ordering
             </h3>
             <div className="space-y-2 text-sm text-hob-cream/80">
               <div className="flex items-start gap-2.5">
@@ -70,6 +70,18 @@ export function Footer() {
                 </div>
               </div>
               <div className="pt-2 flex flex-col gap-2">
+                <a
+                  href={RESTAURANT_CONFIG.location.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-between px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>WhatsApp Order: {RESTAURANT_CONFIG.location.phone}</span>
+                  </span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
                 <a
                   href={RESTAURANT_CONFIG.deliveryPartners.zomatoUrl}
                   target="_blank"
@@ -100,13 +112,22 @@ export function Footer() {
             <p className="text-xs text-hob-cream/75 leading-relaxed">
               {RESTAURANT_CONFIG.location.address}, {RESTAURANT_CONFIG.location.landmark}, {RESTAURANT_CONFIG.location.pincode}
             </p>
-            <div className="space-y-1.5 text-xs text-hob-cream/80">
+            <div className="space-y-2 text-xs text-hob-cream/80">
               <a
                 href={`tel:${RESTAURANT_CONFIG.location.phone}`}
-                className="flex items-center gap-2 hover:text-hob-caramel transition-colors"
+                className="flex items-center gap-2 font-bold text-white hover:text-hob-caramel transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-hob-caramel" />
-                {RESTAURANT_CONFIG.location.phone}
+                <span>Call: {RESTAURANT_CONFIG.location.phone}</span>
+              </a>
+              <a
+                href={RESTAURANT_CONFIG.location.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                <span>WhatsApp: {RESTAURANT_CONFIG.location.phone}</span>
               </a>
               <a
                 href={`mailto:${RESTAURANT_CONFIG.location.email}`}

@@ -1,4 +1,4 @@
-import { MapPin, Navigation, Phone, Clock, Sparkles } from "lucide-react";
+import { MapPin, Navigation, Phone, Clock, Sparkles, MessageSquare } from "lucide-react";
 import { RESTAURANT_CONFIG } from "../data/restaurantConfig";
 
 export function OutletSection() {
@@ -73,6 +73,16 @@ export function OutletSection() {
               >
                 <Phone className="w-4 h-4 text-hob-caramel" />
                 Call: {RESTAURANT_CONFIG.location.phone}
+              </a>
+
+              <a
+                href={RESTAURANT_CONFIG.location.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-3.5 px-6 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-display font-bold text-xs tracking-wider uppercase transition-transform active:scale-95 shadow-md inline-flex items-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" />
+                WhatsApp: {RESTAURANT_CONFIG.location.phone}
               </a>
             </div>
 
